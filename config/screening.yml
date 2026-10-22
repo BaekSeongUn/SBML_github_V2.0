@@ -20,5 +20,5 @@ penalties:
 
 # 최대 80점. 제목+초록 키워드(30) + 저널(15) + 분류(15) 정도면 자동 승인.
 thresholds:
-  auto_approve: 60
-  auto_reject: 20
+  auto_approve: 65
+  auto_reject: 40
