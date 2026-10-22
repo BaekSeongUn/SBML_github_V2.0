@@ -1,0 +1,48 @@
+name: Fetch papers
+on:
+  schedule:
+    - cron: "0 21 * * 0"   # 매주 월요일 06:00 (KST)
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "fetch = 새 논문 수집, rescore = 기준 변경 후 재채점"
+        type: choice
+        options: [fetch, rescore]
+        default: fetch
+      lookback_days:
+        description: "조회 기간(일). 비우면 screening.yml 값 사용 (첫 실행은 365 등 크게)"
+        required: false
+permissions:
+  contents: write
+  issues: write
+concurrency:
+  group: decisions
+  cancel-in-progress: false
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyyaml
+      - name: Fetch + Issues
+        if: ${{ github.event.inputs.mode != 'rescore' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LOOKBACK: ${{ github.event.inputs.lookback_days }}
+        run: |
+          python scripts/labsite.py fetch ${LOOKBACK:+--lookback-days "$LOOKBACK"}
+          python scripts/labsite.py issues
+      - name: Rescore
+        if: ${{ github.event.inputs.mode == 'rescore' }}
+        run: python scripts/labsite.py rescore
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data
+          git diff --cached --quiet || git commit -m "chore: update decisions"
+          git pull --rebase --autostash
+          git push

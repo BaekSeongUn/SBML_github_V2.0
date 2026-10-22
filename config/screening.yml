@@ -1,0 +1,24 @@
+# 자동 검열 설정 — 연구 주제와의 관련도를 점수로 매깁니다.
+mailto: "your-email@university.ac.kr"   # OpenAlex 요청에 포함 (안정적인 풀 사용). 꼭 본인 이메일로 변경
+lookback_days: 14        # 정기 실행 시 최근 며칠 이내 발행 논문을 조회할지
+max_pages: 2             # 검색어당 최대 페이지 수 (페이지당 50건, 최신순)
+max_issues_per_run: 40   # 한 번에 만들 Issue 상한 (넘는 것은 다음 실행에서 이어서 생성)
+min_year: 2015           # 이보다 오래된 논문은 하드 규칙으로 자동 반려
+allowed_types: [article, review, preprint]
+
+weights:
+  keyword_title: 20            # 제목에 키워드
+  keyword_abstract: 10         # 초록에 키워드
+  keyword_hits_bonus_each: 5   # 서로 다른 키워드가 하나 더 걸릴 때마다
+  keyword_hits_bonus_max: 15
+  journal_match: 15            # 주제 저널
+  topic_match: 15              # OpenAlex 분류
+  recent_year: 5
+penalties:
+  exclude_keyword: -40
+  wrong_type: -30
+
+# 최대 80점. 제목+초록 키워드(30) + 저널(15) + 분류(15) 정도면 자동 승인.
+thresholds:
+  auto_approve: 60
+  auto_reject: 20

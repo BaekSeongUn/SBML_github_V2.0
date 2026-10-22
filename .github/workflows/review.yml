@@ -1,0 +1,46 @@
+name: Review decision
+on:
+  issues:
+    types: [labeled]
+  workflow_dispatch:
+    inputs:
+      paper_id:
+        description: "OpenAlex 논문 ID (예: W1234567890)"
+        required: true
+      status:
+        type: choice
+        options: [approved, rejected, pending]
+        required: true
+permissions:
+  contents: write
+  issues: write
+concurrency:
+  group: decisions
+  cancel-in-progress: false
+jobs:
+  review:
+    if: github.event_name == 'workflow_dispatch' || github.event.label.name == 'approve' || github.event.label.name == 'reject'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyyaml
+      - name: Apply decision
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          LABEL: ${{ github.event.label.name }}
+          PAPER_ID: ${{ github.event.inputs.paper_id }}
+          STATUS: ${{ github.event.inputs.status }}
+        run: python scripts/labsite.py review
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data
+          git diff --cached --quiet || git commit -m "chore: review decision"
+          git pull --rebase --autostash
+          git push

@@ -1,0 +1,29 @@
+# 연구실 연구주제 기준 (예시 값 — 연구실에 맞게 수정하세요)
+# search          : OpenAlex에 실제로 던지는 검색어. 너무 넓은 단어(예: polymer 단독)는 결과가 폭증하므로 구문으로 좁게.
+#                   생략하면 keywords를 그대로 검색어로 사용
+# keywords        : 점수 계산용. 제목/초록에 서로 다른 키워드가 많이 걸릴수록 가점 (넓은 단어도 여기엔 OK)
+# exclude_keywords: 포함되면 감점 (주제가 다른 논문 걸러내기)
+# journals        : 이 주제를 주로 다루는 저널. 일치하면 가점 (OpenAlex 표기와 동일하게)
+# openalex_topics : OpenAlex 분류(Topics) 이름의 일부. 일치하면 가점
+topics:
+  - name: 생분해성 고분자
+    search: ["biodegradable polymer", "compostable plastic", "polylactic acid", "polyhydroxyalkanoate", "bioplastic"]
+    keywords: ["biodegradable", "biodegradation", "compostable", "polymer", "polylactic acid", "PLA", "polyhydroxyalkanoate", "PHA", "PBAT", "bioplastic"]
+    exclude_keywords: ["drug delivery", "tissue engineering", "market analysis"]
+    journals: ["Polymer Degradation and Stability", "Biomacromolecules", "Journal of Polymers and the Environment",
+               "International Journal of Biological Macromolecules", "Carbohydrate Polymers", "Polymers"]
+    openalex_topics: ["Biodegradable", "Bioplastic", "Polymer"]
+
+  - name: 바이오차
+    search: ["biochar", "biochar composite", "biochar polymer"]
+    keywords: ["biochar", "pyrolysis", "biomass", "activated carbon", "carbonization", "composite"]
+    exclude_keywords: ["market analysis"]
+    journals: ["Biochar", "Bioresource Technology", "Journal of Analytical and Applied Pyrolysis", "Industrial Crops and Products"]
+    openalex_topics: ["Biochar", "Pyrolysis", "Biomass"]
+
+  - name: 분해도 평가 / 표준
+    search: ["ISO 14855", "biodegradation in compost", "aerobic biodegradation plastics", "plastic mineralization"]
+    keywords: ["ISO 14855", "biodegradation", "compost", "mineralization", "CO2 evolution", "plastic", "degradation"]
+    exclude_keywords: ["market analysis"]
+    journals: ["Polymer Degradation and Stability", "Chemosphere", "Journal of Hazardous Materials", "Science of The Total Environment"]
+    openalex_topics: ["Biodegradation", "Microplastics", "Plastic"]
