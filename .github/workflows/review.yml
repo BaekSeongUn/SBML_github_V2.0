@@ -1,8 +1,8 @@
 name: Review decision
 on:
   issues:
-    types: [closed]
-  workflow_dispatch:
+    types: [closed]          # 주간 검토 Issue를 Close하면 체크 상태가 반영됩니다
+  workflow_dispatch:         # 논문 1건을 직접 번복할 때
     inputs:
       paper_id:
         description: "OpenAlex 논문 ID (예: W1234567890)"
@@ -19,7 +19,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   review:
-    if: github.event_name == 'workflow_dispatch' || github.event.label.name == 'approve' || github.event.label.name == 'reject'
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.issue.labels.*.name, 'weekly-review')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -32,7 +32,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_BODY: ${{ github.event.issue.body }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
-          LABEL: ${{ github.event.label.name }}
           PAPER_ID: ${{ github.event.inputs.paper_id }}
           STATUS: ${{ github.event.inputs.status }}
         run: python scripts/labsite.py review
