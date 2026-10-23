@@ -8,7 +8,7 @@ on:
         description: "OpenAlex 논문 ID (예: W1234567890)"
         required: true
       status:
-        type: choice
+        type: close
         options: [approved, rejected, pending]
         required: true
 permissions:
