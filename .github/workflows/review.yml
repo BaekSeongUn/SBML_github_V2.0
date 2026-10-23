@@ -1,14 +1,14 @@
 name: Review decision
 on:
   issues:
-    types: [labeled]
+    types: [closed]
   workflow_dispatch:
     inputs:
       paper_id:
         description: "OpenAlex 논문 ID (예: W1234567890)"
         required: true
       status:
-        type: close
+        type: choice
         options: [approved, rejected, pending]
         required: true
 permissions:
