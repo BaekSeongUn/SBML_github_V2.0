@@ -53,7 +53,7 @@ function card(p) {
   if (p.oa) h.append(el("span", {className: "badge", textContent: "OA"}));
   const authors = (p.authors || []).slice(0, 6).join(", ") + ((p.authors || []).length > 6 ? " 외" : "");
   const box = el("div", {className: "paper"}, h,
-    el("div", {className: "sub", textContent: `${authors} · ${p.journal || "-"} · ${p.year || ""}`}));
+    el("div", {className: "sub", textContent: `${authors} · ${p.journal || "-"} · ${p.year || ""}${p.jif != null ? ` · IF ${p.jif} ${p.quartile || ""}` : ""}`}));
   if (p.abstract) box.append(el("details", {}, el("summary", {textContent: "초록"}), el("p", {textContent: p.abstract})));
   return box;
 }

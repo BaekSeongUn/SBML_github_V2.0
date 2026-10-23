@@ -5,6 +5,10 @@
 # exclude_keywords: 포함되면 감점 (주제가 다른 논문 걸러내기)
 # journals        : 이 주제를 주로 다루는 저널. 일치하면 가점 (OpenAlex 표기와 동일하게)
 # openalex_topics : OpenAlex 분류(Topics) 이름의 일부. 일치하면 가점
+# jcr_categories  : {JCR 카테고리: 가중치}. 가중치는 0~1이며 주제와 가까울수록 크게 (1.0 = 가장 가까움).
+#                   저널이 여러 카테고리에 속하면 그중 가중치가 가장 큰 것만 반영.
+#                   카테고리 이름은 JCR CSV의 Category 값과 같아야 함 (대소문자 무관).
+#                   실제 CSV에 있는 이름 확인: python scripts/labsite.py categories
 topics:
   - name: 생분해성 고분자
     search: ["biodegradable polymer", "compostable plastic", "polylactic acid", "polyhydroxyalkanoate", "bioplastic"]
@@ -13,6 +17,17 @@ topics:
     journals: ["Polymer Degradation and Stability", "Biomacromolecules", "Journal of Polymers and the Environment",
                "International Journal of Biological Macromolecules", "Carbohydrate Polymers", "Polymers"]
     openalex_topics: ["Biodegradable", "Bioplastic", "Polymer"]
+    jcr_categories:
+      "POLYMER SCIENCE": 1.0
+      "MATERIALS SCIENCE, BIOMATERIALS": 0.7
+      "GREEN & SUSTAINABLE SCIENCE & TECHNOLOGY": 0.6
+      "ENGINEERING, CHEMICAL": 0.5
+      "CHEMISTRY, APPLIED": 0.5
+      "MATERIALS SCIENCE, PAPER & WOOD": 0.4
+      "MATERIALS SCIENCE, MULTIDISCIPLINARY": 0.4
+      "ENGINEERING, ENVIRONMENTAL": 0.4
+      "ENVIRONMENTAL SCIENCES": 0.3
+      "CHEMISTRY, MULTIDISCIPLINARY": 0.3
 
   - name: 바이오차
     search: ["biochar", "biochar composite", "biochar polymer"]
@@ -20,6 +35,19 @@ topics:
     exclude_keywords: ["market analysis"]
     journals: ["Biochar", "Bioresource Technology", "Journal of Analytical and Applied Pyrolysis", "Industrial Crops and Products"]
     openalex_topics: ["Biochar", "Pyrolysis", "Biomass"]
+    jcr_categories:
+      "ENGINEERING, ENVIRONMENTAL": 0.9
+      "AGRICULTURAL ENGINEERING": 0.9
+      "SOIL SCIENCE": 0.9
+      "ENERGY & FUELS": 0.8
+      "ENVIRONMENTAL SCIENCES": 0.7
+      "GREEN & SUSTAINABLE SCIENCE & TECHNOLOGY": 0.7
+      "AGRICULTURE, MULTIDISCIPLINARY": 0.6
+      "ENGINEERING, CHEMICAL": 0.5
+      "CHEMISTRY, APPLIED": 0.4
+      "BIOTECHNOLOGY & APPLIED MICROBIOLOGY": 0.4
+      "MATERIALS SCIENCE, MULTIDISCIPLINARY": 0.3
+      "POLYMER SCIENCE": 0.3
 
   - name: 분해도 평가 / 표준
     search: ["ISO 14855", "biodegradation in compost", "aerobic biodegradation plastics", "plastic mineralization"]
@@ -27,3 +55,28 @@ topics:
     exclude_keywords: ["market analysis"]
     journals: ["Polymer Degradation and Stability", "Chemosphere", "Journal of Hazardous Materials", "Science of The Total Environment"]
     openalex_topics: ["Biodegradation", "Microplastics", "Plastic"]
+    jcr_categories:
+      "POLYMER SCIENCE": 0.9
+      "ENGINEERING, ENVIRONMENTAL": 0.9
+      "ENVIRONMENTAL SCIENCES": 0.8
+      "BIOTECHNOLOGY & APPLIED MICROBIOLOGY": 0.5
+      "GREEN & SUSTAINABLE SCIENCE & TECHNOLOGY": 0.5
+      "MATERIALS SCIENCE, BIOMATERIALS": 0.4
+      "MICROBIOLOGY": 0.4
+      "TOXICOLOGY": 0.3
+
+  - name: 업사이클링
+    search: ["plastic upcycling", "upcycled polymer", "chemical recycling polymer", "plastic waste valorization"]
+    keywords: ["upcycling", "upcycle", "upcycled", "recycling", "plastic waste", "valorization", "waste-derived", "circular economy"]
+    exclude_keywords: ["market analysis"]
+    journals: ["Resources, Conservation and Recycling", "Waste Management", "Green Chemistry",
+               "ACS Sustainable Chemistry & Engineering", "Journal of Cleaner Production"]
+    openalex_topics: ["Recycling", "Waste", "Plastic"]
+    jcr_categories:
+      "ENGINEERING, ENVIRONMENTAL": 0.9
+      "GREEN & SUSTAINABLE SCIENCE & TECHNOLOGY": 0.9
+      "ENVIRONMENTAL SCIENCES": 0.8
+      "POLYMER SCIENCE": 0.7
+      "ENGINEERING, CHEMICAL": 0.6
+      "CHEMISTRY, APPLIED": 0.4
+      "MATERIALS SCIENCE, MULTIDISCIPLINARY": 0.4
